@@ -158,4 +158,14 @@ The application UI will be accessible at `http://localhost:3000`, while the back
 
 ---
 
+## 📬 Contact
+
+Have questions, suggestions, or want to contribute? Reach out!
+
+- **Name**: Arish
+- **Email**: [arish@lansub.com](mailto:arish@lansub.com)
+- **GitHub**: [@Arish03](https://github.com/Arish03)
+
+---
+
 *Transform your manufacturing operations with the power of Generative AI.* 🚀
