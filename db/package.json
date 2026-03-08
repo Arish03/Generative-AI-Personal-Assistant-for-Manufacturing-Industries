@@ -1,0 +1,8 @@
+{
+    "name": "@gap/db",
+    "version": "1.0.0",
+    "main": "index.ts",
+    "dependencies": {
+        "mongoose": "^8.2.1"
+    }
+}
