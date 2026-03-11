@@ -23,7 +23,7 @@ export default function OrdersPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch("http://localhost:4000/api/erp/orders");
+                const res = await fetch("/api/erp/orders");
                 if (!res.ok) throw new Error("Failed to fetch");
                 const data = await res.json();
                 setOrders(data.orders);

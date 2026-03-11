@@ -17,6 +17,14 @@ const nextConfig: NextConfig = {
     AZURE_OPENAI_DEPLOYMENT: process.env.AZURE_OPENAI_DEPLOYMENT,
     AZURE_OPENAI_API_VERSION: process.env.AZURE_OPENAI_API_VERSION,
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path((?!auth).*)", // proxy all /api paths except /api/auth
+        destination: "http://localhost:4000/api/:path*", // to the backend server
+      },
+    ];
+  },
 };
 
 export default nextConfig;
