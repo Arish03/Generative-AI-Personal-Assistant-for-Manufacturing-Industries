@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 dotenv.config({ path: path.resolve(process.cwd(), "../backend/.env") });
 
 const nextConfig: NextConfig = {
+
   transpilePackages: ["@gap/db"],
   serverExternalPackages: ["mongoose"],
   env: {
@@ -15,9 +16,6 @@ const nextConfig: NextConfig = {
     AZURE_OPENAI_ENDPOINT: process.env.AZURE_OPENAI_ENDPOINT,
     AZURE_OPENAI_DEPLOYMENT: process.env.AZURE_OPENAI_DEPLOYMENT,
     AZURE_OPENAI_API_VERSION: process.env.AZURE_OPENAI_API_VERSION,
-  },
-  turbopack: {
-    root: path.resolve(__dirname, ".."), // Points to the monorepo root to resolve the lockfile warning
   },
 };
 
