@@ -1,7 +1,10 @@
 {
     "name": "@gap/db",
     "version": "1.0.0",
-    "main": "index.ts",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "npx tsc --project tsconfig.json"
+    },
     "dependencies": {
         "mongoose": "^8.2.1"
     }

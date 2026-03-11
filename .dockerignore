@@ -1,0 +1,35 @@
+# Git
+.git
+.gitignore
+.github
+
+# Docker files (avoid recursive copy)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Dependencies (installed fresh inside the image)
+node_modules
+**/node_modules
+
+# Build outputs (built fresh inside the image)
+.next
+frontend/.next
+backend/dist
+
+# Secrets & local env files
+.env
+.env.*
+
+# Dev/debug logs
+npm-debug.log*
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor configs
+.vscode
+.idea
+*.tsbuildinfo

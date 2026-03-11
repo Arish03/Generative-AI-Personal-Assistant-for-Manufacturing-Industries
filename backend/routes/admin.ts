@@ -1,9 +1,6 @@
 import { Router } from "express";
 import mongoose from "mongoose";
-import User from "@gap/db/models/User";
-import Machine from "@gap/db/models/Machine";
-import Production from "@gap/db/models/Production";
-import ERPRecord from "@gap/db/models/ERPRecord";
+import { User, Machine, Production, ERPRecord } from "@gap/db";
 
 const router = Router();
 

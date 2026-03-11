@@ -1,32 +1,19 @@
 version: '3.8'
 
 services:
+
+  # ----------------------------------------
+  # Application Service (Frontend + Backend)
+  # ----------------------------------------
   gap-app:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000" # Frontend Next.js Interface
-      - "4000:4000" # Backend Express API
+      - "3000:3000" # Next.js Frontend
+      - "4000:4000" # Express Backend API
+    env_file:
+      - ./backend/.env # Reads your existing backend/.env directly
     environment:
       - NODE_ENV=production
-      - MONGODB_URI=mongodb://mongo:27017/gap
-      # Specify your Azure OpenAI keys here or via a .env file
-      - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY:-your_api_key}
-      - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT:-your_endpoint}
-      - AZURE_OPENAI_DEPLOYMENT=${AZURE_OPENAI_DEPLOYMENT:-your_deployment}
-      - AZURE_OPENAI_API_VERSION=${AZURE_OPENAI_API_VERSION:-2023-05-15}
-    depends_on:
-      - mongo
     restart: unless-stopped
-
-  mongo:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
-    restart: unless-stopped
-
-volumes:
-  mongodb_data:

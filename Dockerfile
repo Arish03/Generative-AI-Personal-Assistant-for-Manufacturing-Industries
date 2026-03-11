@@ -1,63 +1,81 @@
-FROM node:20-alpine AS builder
+# ==========================================
+# Stage 1: Builder
+# ==========================================
+FROM node:20-slim AS builder
 
 WORKDIR /app
 
-# Copy the workspace configuration and package.json files first for layer caching
-COPY package.json package-lock.json ./
+# Copy root workspace manifest files (package-lock.json is optional)
+COPY package.json package-lock.json* ./
+
+# Copy all workspace package.json files for dependency resolution
 COPY frontend/package.json ./frontend/
-COPY backend/package.json ./backend/
-COPY db/package.json ./db/
+COPY backend/package.json  ./backend/
+COPY db/package.json       ./db/
 
-# Install all dependencies required for the build
-RUN npm ci
+# Install all dependencies across the workspace.
+# IMPORTANT: Remove any Windows-generated lock file first.
+# It locks in the wrong platform binary (lightningcss-win32-x64), which
+# prevents npm from installing the correct Linux binary (lightningcss-linux-x64-gnu).
+RUN rm -f package-lock.json && npm install --legacy-peer-deps
 
-# Copy the rest of the workspace source code
+# Copy the rest of the source code
 COPY . .
 
-# Build both applications
-# This will run the `build` script in both `/frontend` and `/backend`
+# Build the shared db package (TypeScript -> dist/)
+# The backend imports @gap/db at runtime — it must be compiled JS, not raw .ts
+RUN npx tsc --project db/tsconfig.json
+
+# Build the backend (TypeScript -> dist/)
 RUN npm run build --workspace=backend
+
+# Build the frontend (Next.js production bundle)
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build --workspace=frontend
 
+
 # ==========================================
-# Production Stage
+# Stage 2: Production Runner
 # ==========================================
-FROM node:20-alpine AS runner
+FROM node:20-slim AS runner
 
 WORKDIR /app
 
-# Install concurrently to run both frontend and backend processes together
+# Install concurrently globally to run both services together
 RUN npm install -g concurrently
 
-# Set production environment
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV PORT=4000
-# Expected frontend port is 3000 by default in Next.js
+# NOTE: Do NOT set PORT here globally — Next.js also reads PORT and would
+# incorrectly bind to 4000. The backend gets PORT=4000 via its start command.
 
-# Copy root configurations
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/package-lock.json ./
+# --- Root workspace files ---
+COPY --from=builder /app/package.json       ./
+COPY --from=builder /app/package-lock.json* ./
 
-# Copy shared db structures
-COPY --from=builder /app/db ./db
+# --- Shared db package (compiled JS only, not raw TypeScript) ---
+COPY --from=builder /app/db/package.json  ./db/
+COPY --from=builder /app/db/dist          ./db/dist
 
-# Copy built backend files
-COPY --from=builder /app/backend/package.json ./backend/
-COPY --from=builder /app/backend/dist ./backend/dist
+# --- Backend artifacts ---
+COPY --from=builder /app/backend/package.json  ./backend/
+COPY --from=builder /app/backend/dist          ./backend/dist
 
-# Copy built frontend files
+# --- Frontend artifacts ---
 COPY --from=builder /app/frontend/package.json ./frontend/
-COPY --from=builder /app/frontend/.next ./frontend/.next
-COPY --from=builder /app/frontend/public ./frontend/public
+COPY --from=builder /app/frontend/.next        ./frontend/.next
+COPY --from=builder /app/frontend/public       ./frontend/public
 
-# Copy node_modules (production dependencies)
+# --- Shared node_modules (hoisted by npm workspaces) ---
 COPY --from=builder /app/node_modules ./node_modules
 
-# Expose Next.js port and Express API port
+# Expose both service ports
 EXPOSE 3000
 EXPOSE 4000
 
-# Start both services concurrently
-CMD ["concurrently", "\"npm run start --workspace=backend\"", "\"npm run start --workspace=frontend\""]
+# Start backend (on PORT 4000) and frontend (default 3000) concurrently
+CMD ["concurrently", \
+    "--names", "backend,frontend", \
+    "--prefix-colors", "cyan,magenta", \
+    "PORT=4000 npm run start --workspace=backend", \
+    "npm run start --workspace=frontend"]

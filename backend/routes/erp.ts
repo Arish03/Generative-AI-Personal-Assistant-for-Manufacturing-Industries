@@ -127,4 +127,52 @@ router.get("/inventory", async (req, res) => {
     }
 });
 
+// GET /api/erp/orders
+router.get("/orders", async (req, res) => {
+    try {
+        const orders = [
+            { id: "ORD-001", product: "Steel Rods", qty: 500, date: "2026-03-01", priority: "high", status: "completed" },
+            { id: "ORD-002", product: "Copper Sheets", qty: 200, date: "2026-03-03", priority: "medium", status: "in_progress" },
+            { id: "ORD-003", product: "Aluminum Bars", qty: 350, date: "2026-03-05", priority: "low", status: "pending" },
+            { id: "ORD-004", product: "Iron Pipes", qty: 150, date: "2026-03-07", priority: "high", status: "completed" },
+            { id: "ORD-005", product: "Brass Fittings", qty: 800, date: "2026-03-09", priority: "medium", status: "in_progress" },
+            { id: "ORD-006", product: "Titanium Bolts", qty: 1200, date: "2026-03-10", priority: "low", status: "pending" },
+        ];
+        res.json({ orders });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to fetch orders" });
+    }
+});
+
+// GET /api/erp/finance
+router.get("/finance", async (req, res) => {
+    try {
+        const stats = {
+            totalIncome: "$648,000",
+            totalExpenses: "$312,000",
+            netProfit: "$336,000",
+            operatingCost: "$52,000",
+        };
+        const monthlyData = [
+            { month: "Jan", income: 95000, expense: 48000 },
+            { month: "Feb", income: 102000, expense: 52000 },
+            { month: "Mar", income: 98000, expense: 49000 },
+            { month: "Apr", income: 115000, expense: 55000 },
+            { month: "May", income: 108000, expense: 53000 },
+            { month: "Jun", income: 130000, expense: 55000 },
+        ];
+        const costBreakdown = [
+            { name: "Raw Materials", value: 40 },
+            { name: "Labour", value: 25 },
+            { name: "Overhead", value: 15 },
+            { name: "Logistics", value: 12 },
+            { name: "Other", value: 8 },
+        ];
+        res.json({ stats, monthlyData, costBreakdown });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to fetch finance data" });
+    }
+});
+
 export default router;
+

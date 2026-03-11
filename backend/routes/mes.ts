@@ -1,6 +1,5 @@
 import { Router } from "express";
-import Machine from "@gap/db/models/Machine";
-import Production from "@gap/db/models/Production";
+import { Machine, Production } from "@gap/db";
 
 const router = Router();
 
