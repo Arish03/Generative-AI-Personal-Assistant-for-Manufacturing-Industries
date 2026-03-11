@@ -16,10 +16,9 @@ const typeColors: Record<string, string> = {
 };
 
 export default function MESDashboardPage() {
-    const [data, setData] = useState<any>(null);
+    const [data, setData] = useState<any>(null); // Kept for other parts of the dashboard
     const [machines, setMachines] = useState<any[]>([]); // Added machines state
     const [alerts, setAlerts] = useState<any[]>([]);     // Added alerts state
-    const [data, setData] = useState<any>(null); // Kept for other parts of the dashboard
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
