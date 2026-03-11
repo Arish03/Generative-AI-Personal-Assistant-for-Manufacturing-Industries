@@ -17,19 +17,24 @@ const typeColors: Record<string, string> = {
 
 export default function MESDashboardPage() {
     const [data, setData] = useState<any>(null);
+    const [machines, setMachines] = useState<any[]>([]); // Added machines state
+    const [alerts, setAlerts] = useState<any[]>([]);     // Added alerts state
+    const [data, setData] = useState<any>(null); // Kept for other parts of the dashboard
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch("http://localhost:4000/api/mes/dashboard");
-                if (!res.ok) throw new Error("Failed to fetch");
-                const result = await res.json();
-                setData(result);
-            } catch (error) {
-                console.error("Failed to fetch MES data", error);
-                setError("Unable to connect to the backend server. Please ensure the backend is running at http://localhost:4000");
+                const res = await fetch("/api/mes/dashboard");
+                if (!res.ok) throw new Error("Failed to fetch dashboard data");
+                const result = await res.json(); // Changed variable name to 'result' to avoid conflict with state 'data'
+                setData(result); // Keep original setData for other dashboard components
+                setMachines(result.machines); // Use result for machines
+                setAlerts(result.alerts);   // Use result for alerts
+            } catch (e) { // Changed error variable name to 'e'
+                console.error("Failed to fetch MES data", e); // Log the error
+                setError("Unable to connect to the backend server.");
             } finally {
                 setLoading(false);
             }

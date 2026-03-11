@@ -23,13 +23,13 @@ export default function ERPDashboardPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch("http://localhost:4000/api/erp/dashboard");
-                if (!res.ok) throw new Error("Failed to fetch");
+                const res = await fetch("/api/erp/dashboard");
+                if (!res.ok) throw new Error("Failed to fetch dashboard data");
                 const result = await res.json();
                 setData(result);
             } catch (error) {
-                console.error("Failed to fetch ERP data", error);
-                setError("Unable to connect to the backend server. Please ensure the backend is running at http://localhost:4000");
+                console.error("Error fetching ERP dashboard data:", error);
+                setError("Unable to connect to the backend server.");
             } finally {
                 setLoading(false);
             }

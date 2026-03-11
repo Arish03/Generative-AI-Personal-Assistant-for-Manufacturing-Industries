@@ -24,7 +24,7 @@ export default function ProductionPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch("http://localhost:4000/api/mes/production");
+                const res = await fetch("/api/mes/production");
                 if (!res.ok) throw new Error("Failed to fetch");
                 const result = await res.json();
                 setData(result);

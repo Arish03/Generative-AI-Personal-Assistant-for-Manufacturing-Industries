@@ -27,7 +27,7 @@ export function NewProjectModal({ isOpen, onClose, onProjectCreated }: NewProjec
 
         try {
             // Using direct fetch temporarily since we assume `api-client.ts` might not have generic posts enabled yet
-            const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+            const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
 
             const req = await fetch(`${BASE_URL}/projects`, {
                 method: "POST",

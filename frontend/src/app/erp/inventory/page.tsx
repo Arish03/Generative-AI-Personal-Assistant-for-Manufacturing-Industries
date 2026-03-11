@@ -23,7 +23,7 @@ export default function InventoryPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch("http://localhost:4000/api/erp/inventory");
+                const res = await fetch("/api/erp/inventory");
                 if (!res.ok) throw new Error("Failed to fetch");
                 const data = await res.json();
                 setItems(data.items);

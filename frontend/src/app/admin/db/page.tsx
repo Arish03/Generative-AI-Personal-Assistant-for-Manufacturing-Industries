@@ -30,7 +30,7 @@ export default function DBAdminPage() {
 
     const fetchStats = async () => {
         try {
-            const res = await fetch("http://localhost:4000/api/admin/db-stats");
+            const res = await fetch("/api/admin/db-stats");
             const data = await res.json();
             setStats(data);
         } catch (error) {
@@ -47,7 +47,7 @@ export default function DBAdminPage() {
     const handleAction = async (endpoint: string, actionName: string) => {
         setActionLoading(actionName);
         try {
-            await fetch(`http://localhost:4000/api/admin/${endpoint}`);
+            await fetch(`/api/admin/${endpoint}`);
             await fetchStats();
         } catch (error) {
             console.error(`Action ${actionName} failed`, error);
@@ -167,7 +167,7 @@ export default function DBAdminPage() {
                                 </div>
                                 <div className="flex justify-between text-sm">
                                     <span className="text-[hsl(var(--muted-foreground))]">API Endpoint</span>
-                                    <span className="font-mono text-xs">http://localhost:4000</span>
+                                    <span className="font-mono text-xs text-muted-foreground whitespace-normal break-all">Next.js API Routes Proxy</span>
                                 </div>
                             </div>
                             <Button variant="outline" className="w-full" onClick={fetchStats} disabled={loading}>

@@ -22,7 +22,7 @@ export default function MachinesPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch("http://localhost:4000/api/mes/machines");
+                const res = await fetch("/api/mes/machines");
                 if (!res.ok) throw new Error("Failed to fetch");
                 const data = await res.json();
                 setMachines(data.machines);

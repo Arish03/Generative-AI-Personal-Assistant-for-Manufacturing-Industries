@@ -22,7 +22,7 @@ export default function AlertsPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch("http://localhost:4000/api/mes/alerts");
+                const res = await fetch("/api/mes/alerts");
                 if (!res.ok) throw new Error("Failed to fetch");
                 const data = await res.json();
                 setAlerts(data.alerts);
